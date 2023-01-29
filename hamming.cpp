@@ -93,16 +93,16 @@ uint8_t table_encode(uint8_t message)
 	return code[message];
 }
 
-const uint8_t syndrome_mask[PARITY_VALUES] =
+const uint8_t syndrome_to_error_vector[PARITY_VALUES] =
 {
 	0x00,	/* syndrome = 0 0 0 */
 	0x01,	/* syndrome = 0 0 1 */
 	0x02,	/* syndrome = 0 1 0 */
 	0x20,	/* syndrome = 0 1 1 */
 	0x04,	/* syndrome = 1 0 0 */
-	0x08,	/* syndrome = 1 0 1 */
-	0x40,	/* syndrome = 1 1 0 */
-	0x10	/* syndrome = 1 1 1 */
+	0x10,	/* syndrome = 1 0 1 */
+	0x08,	/* syndrome = 1 1 0 */
+	0x40	/* syndrome = 1 1 1 */
 };
 
 /*
@@ -117,5 +117,5 @@ uint8_t decode(uint8_t code)
 {
 	uint8_t s = syndrome(code);
 
-	return (code ^ syndrome_mask[s]) >> PARITY_BITS;
+	return (code ^ syndrome_to_error_vector[s]) >> PARITY_BITS;
 }
