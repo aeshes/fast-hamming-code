@@ -8,12 +8,12 @@
 */
 
 /*
-* Function: xor_sum
+* Function: sum_bits
 * Purpose:  performs modulo 2 sum of all bits in the word.
 * Returns:  0 if even number of bits set to 1
 *           1 if odd number of bits set to 1
 */
-uint8_t xor_sum(uint8_t a)
+uint8_t sum_bits(uint8_t a)
 {
 	uint8_t sum = 0;
 	while (a > 0)
@@ -48,7 +48,7 @@ uint8_t encode(uint8_t message)
 	for (int col = 0; col < matrix_cols; col++)
 	{
 		result <<= 1;
-		result |= xor_sum(message & gen_matrix[col]); /* mod 2 multiplication of vectors and summing bits of result modulo 2 */
+		result |= sum_bits(message & gen_matrix[col]); /* mod 2 multiplication of vectors and summing bits of result modulo 2 */
 	}
 	return result;
 }
@@ -72,7 +72,7 @@ uint8_t syndrome(uint8_t message)
 	for (int row = 0; row < matrix_rows; row++)
 	{
 		result <<= 1;
-		result |= xor_sum(parity_matrix[row] & message); /* mod 2 multiplication of vectors and summing bits of result modulo 2 */
+		result |= sum_bits(parity_matrix[row] & message); /* mod 2 multiplication of vectors and summing bits of result modulo 2 */
 	}
 	return result;
 }
@@ -91,4 +91,29 @@ void fill_code_table()
 uint8_t table_encode(uint8_t message)
 {
 	return code[message];
+}
+
+const uint8_t syndrome_mask[PARITY_VALUES] =
+{
+	0x00,	/* syndrome = 0 0 0 */
+	0x01,	/* syndrome = 0 0 1 */
+	0x02,	/* syndrome = 0 1 0 */
+	0x03,	/* syndrome = 0 1 1 */
+	0x04,	/* syndrome = 1 0 0 */
+	0x05,	/* syndrome = 1 0 1 */
+	0x06,	/* syndrome = 1 1 0 */
+	0x07	/* syndrome = 1 1 1 */
+};
+
+/*
+* Function: decode
+* Purpose:  This function uses syndrome decoding algorithm to determine value encoded by a CODE_BITS long code.
+*           Syndrome is a result of multiplying of code by parity check matrix: s = HcT.
+*           If there are no errors in the code, the syndrome will be a 0 vector.  If the syndrome is not 0, 
+*           it will match a column in H.  The column it matches is likely the errored bit.
+* Returns:  Nearest value to encoded data
+*/
+uint8_t decode(uint8_t code)
+{
+	return (code ^ syndrome_mask[code]) >> PARITY_BITS;
 }
