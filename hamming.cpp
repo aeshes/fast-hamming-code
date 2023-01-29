@@ -98,11 +98,11 @@ const uint8_t syndrome_mask[PARITY_VALUES] =
 	0x00,	/* syndrome = 0 0 0 */
 	0x01,	/* syndrome = 0 0 1 */
 	0x02,	/* syndrome = 0 1 0 */
-	0x03,	/* syndrome = 0 1 1 */
+	0x20,	/* syndrome = 0 1 1 */
 	0x04,	/* syndrome = 1 0 0 */
-	0x05,	/* syndrome = 1 0 1 */
-	0x06,	/* syndrome = 1 1 0 */
-	0x07	/* syndrome = 1 1 1 */
+	0x08,	/* syndrome = 1 0 1 */
+	0x40,	/* syndrome = 1 1 0 */
+	0x10	/* syndrome = 1 1 1 */
 };
 
 /*
