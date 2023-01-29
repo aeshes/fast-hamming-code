@@ -22,17 +22,14 @@ uint8_t encode(uint8_t message)
 	*  [0 0 1 0 1 0 1]
 	*  [0 0 0 1 1 1 0]
 	* 
-	*	8 4 2 1 B D E
+	*   8 4 2 1 B D E
 	*/
 	uint8_t gen_matrix[matrix_cols] = { 0x08, 0x04, 0x02, 0x01, 0x0B, 0x0D, 0x0E };
 
 	for (int col = 0; col < matrix_cols; col++)
 	{
 		result <<= 1;
-		if (xor_sum(message & gen_matrix[col]))
-		{
-			result |= 1;
-		}
+		result |= xor_sum(message & gen_matrix[col]);
 	}
 	return result;
 }
@@ -51,10 +48,7 @@ uint8_t syndrome(uint8_t message)
 	for (int row = 0; row < matrix_rows; row++)
 	{
 		result <<= 1;
-		if (xor_sum(parity_matrix[row] & message))
-		{
-			result |= 1;
-		}
+		result |= xor_sum(parity_matrix[row] & message);
 	}
 	return result;
 }
