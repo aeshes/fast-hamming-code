@@ -115,5 +115,7 @@ const uint8_t syndrome_mask[PARITY_VALUES] =
 */
 uint8_t decode(uint8_t code)
 {
-	return (code ^ syndrome_mask[code]) >> PARITY_BITS;
+	uint8_t s = syndrome(code);
+
+	return (code ^ syndrome_mask[s]) >> PARITY_BITS;
 }
